@@ -1,0 +1,85 @@
+name: Build Dev Environment
+
+on: 
+    push:
+        branches: 
+            - dev
+
+jobs:
+  Build-Terragrunt-Env:
+    permissions: 
+      contents: read
+      id-token: write
+
+    runs-on: ubuntu-latest
+    outputs:
+      azure-logged-in: ${{ steps.login-to-azure.outputs.logged-in }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+    
+      - name: Azure Login with OIDC
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.ARM_CLIENT_ID }}
+          tenant-id: ${{ secrets.ARM_TENANT_ID }}
+          subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+
+
+      - name: Set up terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.10.5
+
+      - name: Install Terragrunt and OpenTofu
+        uses: gruntwork-io/terragrunt-action@v3
+        with:
+          tg_version: '0.82.2'
+          tofu_version: '1.10.1'
+
+      - name: Set azure environment variables
+        run: |
+          echo "AZURE_TENANT_ID=${{ secrets.ARM_TENANT_ID }}" >> $GITHUB_ENV
+          echo "AZURE_SUBSCRIPTION_ID=${{ secrets.ARM_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
+          echo "AZURE_CLIENT_ID=${{ secrets.ARM_CLIENT_ID }}" >> $GITHUB_ENV
+
+      - name: Run Terragrunt Apply in Dev
+        run: |
+          cd backend/terragrunt/live
+          terragrunt apply --all --auto-approve --non-interactive -lock=false
+
+
+
+  Push-to-storage:
+    needs: Build-Terragrunt-Env
+    runs-on: ubuntu-latest
+
+    permissions: 
+      contents: read
+      id-token: write
+  
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4  # v3 has a known cache path resolution bug
+        with:
+          node-version: '20'
+      - name: Authenticate to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.ARM_CLIENT_ID }}
+          tenant-id: ${{ secrets.ARM_TENANT_ID }}
+          subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+
+      - name: Push Docs
+        working-directory: frontend/website/symtex-dev-site
+        run: |
+            ls -a
+            npm install
+            npm run build
+            ls -la build
+            az storage blob upload-batch -d '$web' -s build --account-name smtxwebdevwebsite --auth-mode login
