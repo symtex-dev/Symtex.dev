@@ -45,10 +45,10 @@ jobs:
           echo "AZURE_CLIENT_ID=${{ secrets.ARM_CLIENT_ID }}" >> $GITHUB_ENV
 
 
-      - name: Run Terragrunt Apply in Dev
+      - name: Run Terragrunt init in Dev
         run: |
           cd backend/terragrunt/live
-          terragrunt init --all --auto-approve --non-interactive -lock=false
+          terragrunt init --all --auto-approve --non-interactive
 
 
       - name: Run Terragrunt Apply in Dev
