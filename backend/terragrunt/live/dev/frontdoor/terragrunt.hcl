@@ -46,7 +46,6 @@ inputs = {
     main_origin_host_name = dependency.storage.outputs.primary_web_endpoint
     main_custom_domain_name = "dev.symtex.dev"
     main_route_name = "${local.parent.prefix}-${local.environment}"
-    main_firewall_poicy_name = "${local.parent.prefix}-${local.environment}"
+    main_firewall_poicy_name = "${local.parent.prefix}-${local.environment}-fwp"
     
-
 }
