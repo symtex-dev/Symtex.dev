@@ -39,12 +39,13 @@ terraform {
 }
 
 inputs = {
-    main_dns_zone_name = "${local.parent.prefix}-${local.environment}-dns-zone"
+    main_dns_zone_name = "dev.symtex.dev"
     main_profile_name = "${local.parent.prefix}-${local.environment}-profile"
     main_endpoint_name = "${local.parent.prefix}-${local.environment}-endpoint"
     main_origin_group_name = "${local.parent.prefix}-${local.environment}-origin-group"
     main_origin_name = "${local.parent.prefix}-${local.environment}-origin"
-    main_origin_host_name = dependency.storage.outputs.primary_web_endpoint
+    # Extract hostname from the endpoint URL (removes protocol and trailing slash)
+    main_origin_host_name = regex("^(?:https?://)?([^/]+)", dependency.storage.outputs.primary_web_endpoint)
     main_custom_domain_name = "${local.parent.prefix}-${local.environment}-dn"
     main_route_name = "${local.parent.prefix}-${local.environment}-route"
     main_firewall_policy_name = "smtxwebapp${local.environment}fwp"
