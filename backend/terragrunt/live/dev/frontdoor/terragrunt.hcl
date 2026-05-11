@@ -1,0 +1,52 @@
+include "root" {
+    path = find_in_parent_folders("root.hcl")
+    expose = true
+}
+
+locals {
+    parent = read_terragrunt_config(find_in_parent_folders("root.hcl")).locals
+    environment = basename(dirname(get_terragrunt_dir())) 
+    folder_name = basename(get_terragrunt_dir())
+}
+
+dependency "rg" {
+    config_path = "../resource_group"
+
+    mock_outputs_allowed_terraform_commands = ["validate", "plan", "init"]
+    mock_outputs = {
+        resource_group_name = "mock-resource-group"
+    }
+}
+
+dependency "storage" {
+    config_path = "../blob-site"
+
+}
+
+
+remote_state {
+    backend = include.root.remote_state.backend
+    config  = merge(
+        include.root.remote_state.config,
+        {key = "${local.parent.prefix}/${local.environment}/${local.folder_name}/terraform.state"}
+    ) 
+}
+
+
+
+terraform {
+    source = "git::https://git@github.com/Capson12/blob-website.git//module/frontdoor"
+}
+
+inputs = {
+    main_dns_zone_name = "${local.parent.prefix}-${local.environment}-dns-zone"
+    main_profile_name = "${local.parent.prefix}-${local.environment}-profile"
+    main_endpoint_name = "${local.parent.prefix}-${local.environment}-endpoint"
+    main_origin_group_name = "${local.parent.prefix}-${local.environment}-origin-group"
+    main_origin_host_name = dependency.storage.outputs.primary_web_endpoint
+    main_custom_domain_name = "dev.symtex.dev"
+    main_route_name = "${local.parent.prefix}-${local.environment}"
+    main_firewall_poicy_name = "${local.parent.prefix}-${local.environment}"
+    
+
+}
