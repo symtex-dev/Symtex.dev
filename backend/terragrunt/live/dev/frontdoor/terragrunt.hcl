@@ -44,8 +44,8 @@ inputs = {
     main_endpoint_name = "${local.parent.prefix}-${local.environment}-endpoint"
     main_origin_group_name = "${local.parent.prefix}-${local.environment}-origin-group"
     main_origin_name = "${local.parent.prefix}-${local.environment}-origin"
-    # Extract hostname from the endpoint URL string (removes protocol and trailing slash)
-    main_origin_host_name = regex("^(?:https?://)?([^/]+)", dependency.storage.outputs.primary_web_endpoint)
+    # Extract hostname from the first element of the endpoint URL list (removes protocol and trailing slash)
+    main_origin_host_name = regex("^(?:https?://)?([^/]+)", dependency.storage.outputs.primary_web_endpoint[0])
     main_custom_domain_name = "${local.parent.prefix}-${local.environment}-dn"
     main_route_name = "${local.parent.prefix}-${local.environment}-route"
     main_firewall_policy_name = "smtxwebapp${local.environment}fwp"
