@@ -43,9 +43,14 @@ inputs = {
     main_profile_name = "${local.parent.prefix}-${local.environment}-profile"
     main_endpoint_name = "${local.parent.prefix}-${local.environment}-endpoint"
     main_origin_group_name = "${local.parent.prefix}-${local.environment}-origin-group"
+    main_origin_name = "${local.parent.prefix}-${local.environment}-origin"
     main_origin_host_name = dependency.storage.outputs.primary_web_endpoint
     main_custom_domain_name = "dev.symtex.dev"
-    main_route_name = "${local.parent.prefix}-${local.environment}"
-    main_firewall_poicy_name = "${local.parent.prefix}-${local.environment}-fwp"
-    
+    main_route_name = "${local.parent.prefix}-${local.environment}-route"
+    main_firewall_policy_name = "${local.parent.prefix}-${local.environment}-fwp"
+    location = local.parent.location
+    resource_group_name = dependency.rg.outputs.name
+    name =local.parent.prefix
+    main_security_policy_name = "${local.parent.prefix}-${local.environment}-scp"
+
 }
