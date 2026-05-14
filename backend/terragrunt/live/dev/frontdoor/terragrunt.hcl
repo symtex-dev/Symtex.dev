@@ -52,6 +52,5 @@ inputs = {
     location = local.parent.location
     resource_group_name = dependency.rg.outputs.name
     main_security_policy_name = "${local.parent.prefix}-${local.environment}-scp"
-    frontdoor_custom_domain_name = www.symtex
 
 }
