@@ -39,7 +39,7 @@ terraform {
 }
 
 inputs = {
-    main_dns_zone_name = "symtex.dev"
+    main_dns_zone_name = "www.symtex.dev"
     main_profile_name = "${local.parent.prefix}-${local.environment}-profile"
     main_endpoint_name = "${local.parent.prefix}-${local.environment}-endpoint"
     main_origin_group_name = "${local.parent.prefix}-${local.environment}-origin-group"
@@ -52,5 +52,6 @@ inputs = {
     location = local.parent.location
     resource_group_name = dependency.rg.outputs.name
     main_security_policy_name = "${local.parent.prefix}-${local.environment}-scp"
+    frontdoor_custom_domain_name = www.symtex
 
 }
