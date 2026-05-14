@@ -39,7 +39,7 @@ terraform {
 }
 
 inputs = {
-    main_dns_zone_name = "www.symtex.dev"
+    main_dns_zone_name = "symtex.dev"
     main_profile_name = "${local.parent.prefix}-${local.environment}-profile"
     main_endpoint_name = "${local.parent.prefix}-${local.environment}-endpoint"
     main_origin_group_name = "${local.parent.prefix}-${local.environment}-origin-group"
