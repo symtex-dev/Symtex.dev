@@ -20,6 +20,8 @@ dependency "rg" {
 
 dependency "storage" { config_path = "../blob-site" }
 
+dependency "domain" { config_path = "../../shared/dns_domain"}
+
 
 remote_state {
     backend = include.root.remote_state.backend
