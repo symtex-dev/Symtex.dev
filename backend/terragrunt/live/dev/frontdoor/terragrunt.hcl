@@ -54,5 +54,6 @@ inputs = {
     location = local.parent.location
     resource_group_name = dependency.rg.outputs.name
     main_security_policy_name = "${local.parent.prefix}-${local.environment}-scp"
+    dns_zone_id = dependency.domain.outputs.dns_zone_id
 
 }
