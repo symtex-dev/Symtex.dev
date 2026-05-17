@@ -3,9 +3,6 @@ locals {
     location = "uksouth"
     dns_domain = "dev.symtex.dev"
 
-    additional_custom_domains = []
-    cname_records             = []
-
     backend_resource_group_name = "SMTX-CRITICAL"
     backend_storage_account_name = "smtxtfstatestorage"
     backend_container_name = "smtx-webappcontainer"
