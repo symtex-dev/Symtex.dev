@@ -18,10 +18,7 @@ dependency "rg" {
     }
 }
 
-dependency "storage" {
-    config_path = "../blob-site"
-
-}
+dependency "storage" { config_path = "../blob-site" }
 
 
 remote_state {
@@ -34,18 +31,15 @@ remote_state {
 
 
 
-terraform {
-    source = "git::https://git@github.com/Capson12/blob-website.git//module/frontdoor"
-}
+terraform { source = "git::https://git@github.com/Capson12/blob-website.git//module/frontdoor" }
 
 inputs = {
-    main_dns_zone_name = "symtex.dev"
+    main_dns_zone_name = local.parent.dns_domain
     main_profile_name = "${local.parent.prefix}-${local.environment}-profile"
     main_endpoint_name = "${local.parent.prefix}-${local.environment}-endpoint"
     main_origin_group_name = "${local.parent.prefix}-${local.environment}-origin-group"
     main_origin_name = "${local.parent.prefix}-${local.environment}-origin"
-    # Decode JSON-encoded list output, then extract hostname (removes protocol and trailing slash)
-   main_origin_host_name = regex("^(?:https?://)?([^/]+)", dependency.storage.outputs.primary_web_endpoint)[0]
+    main_origin_host_name = regex("^(?:https?://)?([^/]+)", dependency.storage.outputs.primary_web_endpoint)[0]
     main_custom_domain_name = "${local.parent.prefix}-${local.environment}-dn"
     main_route_name = "${local.parent.prefix}-${local.environment}-route"
     main_firewall_policy_name = "smtxwebapp${local.environment}fwp"
