@@ -21,7 +21,7 @@ remote_state {
 terraform { source = "git::https://git@github.com/Capson12/blob-website.git//module/resource_group" }
 
 inputs = {
-    name = "${local.parent.prefix}-${local.environment}-"
+    name = "${local.parent.prefix}-${local.environment}-dns_domain"
     location = local.parent.location
 
 }
