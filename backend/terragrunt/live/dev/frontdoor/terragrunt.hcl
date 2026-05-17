@@ -20,7 +20,8 @@ dependency "rg" {
 
 dependency "storage" { config_path = "../blob-site" }
 
-dependency "domain" { config_path = "../../shared/dns_domain"
+dependency "domain" { 
+    config_path = "../../shared/dns_domain"
 
  mock_outputs = {
           domain_output = "mock-domain-output"
