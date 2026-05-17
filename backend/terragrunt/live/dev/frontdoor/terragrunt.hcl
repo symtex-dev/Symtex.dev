@@ -42,7 +42,7 @@ remote_state {
 terraform { source = "git::https://git@github.com/Capson12/blob-website.git//module/frontdoor" }
 
 inputs = {
-    dns_zone_name = local.parent.dns_domain
+    dns_zone_name = dev.symtex.dev
     main_profile_name = "${local.parent.prefix}-${local.environment}-profile"
     main_endpoint_name = "${local.parent.prefix}-${local.environment}-endpoint"
     main_origin_group_name = "${local.parent.prefix}-${local.environment}-origin-group"
