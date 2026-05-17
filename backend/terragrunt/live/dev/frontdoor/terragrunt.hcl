@@ -14,13 +14,18 @@ dependency "rg" {
 
     mock_outputs_allowed_terraform_commands = ["validate", "plan", "init"]
     mock_outputs = {
-        resource_group_name = "mock-resource-group"
+        name = "mock-resource-group"
     }
 }
 
 dependency "storage" { config_path = "../blob-site" }
 
-dependency "domain" { config_path = "../../shared/dns_domain"}
+dependency "domain" { config_path = "../../shared/dns_domain"
+
+ mock_outputs = {
+          domain_output = "mock-domain-output"
+      }
+ }
 
 
 remote_state {
