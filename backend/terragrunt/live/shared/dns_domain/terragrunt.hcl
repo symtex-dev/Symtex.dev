@@ -11,6 +11,11 @@ locals {
 
 dependency "rg" {
     config_path = "../resource_group"
+
+    mock_outputs_allowed_terraform_commands = ["validate", "plan", "init"]
+    mock_outputs = {
+        name = "mock-resource-group"
+    }
 }
 
 
