@@ -1,7 +1,7 @@
 locals {
     prefix = "smtx-webapp"
     location = "uksouth"
-    dns_domain = "dev.symtex.dev"
+    dns_domain = "symtex.dev"
 
     backend_resource_group_name = "SMTX-CRITICAL"
     backend_storage_account_name = "smtxtfstatestorage"
