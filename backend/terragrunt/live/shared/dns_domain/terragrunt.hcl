@@ -33,7 +33,7 @@ terraform {
 }
 
 inputs = {
-    main_dns_zone_name = local.parent.dns_domain
+    dns_zone_name = local.parent.dns_domain
     resource_group_name = dependency.rg.outputs.name
 
 }
