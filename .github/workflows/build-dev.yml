@@ -47,13 +47,13 @@ jobs:
 
       - name: Run Terragrunt init in Dev
         run: |
-          cd backend/terragrunt/live
+          cd backend/terragrunt/live/dev
           terragrunt init --all
 
 
       - name: Run Terragrunt Apply in Dev
         run: |
-          cd backend/terragrunt/live
+          cd backend/terragrunt/live/dev
           terragrunt apply --all --auto-approve --non-interactive -lock=false
 
 
