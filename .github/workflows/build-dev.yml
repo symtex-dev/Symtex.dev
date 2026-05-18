@@ -48,7 +48,7 @@ jobs:
       - name: Run Terragrunt init in Dev
         run: |
           cd backend/terragrunt/live/dev
-          terragrunt init --all
+          terragrunt init --all --non-interactive
 
 
       - name: Run Terragrunt Apply in Dev
