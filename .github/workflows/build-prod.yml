@@ -1,4 +1,4 @@
-name: Build Dev Environment
+name: Build Prod Environment
 
 on: 
     push:
@@ -45,16 +45,16 @@ jobs:
           echo "AZURE_CLIENT_ID=${{ secrets.ARM_CLIENT_ID }}" >> $GITHUB_ENV
 
 
-      - name: Run Terragrunt init in Dev
+      - name: Run Terragrunt init in Prod
         run: |
           cd backend/terragrunt/live/prod
-          terragrunt init --all --non-interactive
+          terragrunt init --all --non-interactive --terragrunt-non-interactive
 
 
-      - name: Run Terragrunt Apply in Dev
+      - name: Run Terragrunt Apply in Prod
         run: |
           cd backend/terragrunt/live/prod
-          terragrunt apply --all --auto-approve --non-interactive -lock=false
+          terragrunt apply --all --auto-approve --non-interactive --terragrunt-non-interactive -lock=false
 
 
 
@@ -79,13 +79,9 @@ jobs:
       - name: Get Storage Account Name
         id: get_storage
         run: |
-          cd backend/terragrunt/live/dev/blob-site
+          cd backend/terragrunt/live/prod/blob-site
           echo "STORAGE_ACCOUNT_NAME=$(terragrunt output -raw storage_account_name)" >> $GITHUB_ENV
 
-
-
-          
-          
       - name: Authenticate to Azure
         uses: azure/login@v1
         with:
