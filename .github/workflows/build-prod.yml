@@ -48,13 +48,13 @@ jobs:
       - name: Run Terragrunt init in Prod
         run: |
           cd backend/terragrunt/live/prod
-          terragrunt init --all --non-interactive --terragrunt-non-interactive
+          terragrunt init --all --non-interactive 
 
 
       - name: Run Terragrunt Apply in Prod
         run: |
           cd backend/terragrunt/live/prod
-          terragrunt apply --all --auto-approve --non-interactive --terragrunt-non-interactive -lock=false
+          terragrunt apply --all --auto-approve --non-interactive -lock=false
 
 
 
