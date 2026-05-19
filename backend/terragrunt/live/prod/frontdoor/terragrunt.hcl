@@ -27,7 +27,14 @@ dependency "rg" {
     }
 }
 
-dependency "storage" { config_path = "../blob-site" }
+dependency "storage" { 
+    config_path = "../blob-site"
+    mock_outputs_allowed_terraform_commands = ["validate", "plan", "init"]
+    mock_outputs = {
+          storage_output = "mock-storage-output",
+          primary_web_endpoint = "https://mock.blob.core.windows.net"
+      }
+ }
 
 dependency "domain" { 
     config_path = "../../shared/dns_domain"
@@ -56,9 +63,11 @@ inputs = {
     resource_group_name                 = dependency.rg.outputs.name
 
     # DNS record
-    apex_cname_name                     = local.environment
+    apex_cname_name                     = null
     create_apex_alias                   = true
-    additional_custom_domains           = [ { name = "www-domain", host_name = "www.domain.com", subdomain = "www" } ]
+    additional_custom_domains           = [ 
+        { name = "www-domain", host_name = "www.symtex.dev", subdomain = "www" } 
+        ]
     dns_resource_group_name             = dependency.shared_rg.outputs.name
     
     # DNS (shared zone passed in)  

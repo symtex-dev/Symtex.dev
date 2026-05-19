@@ -56,6 +56,12 @@ jobs:
           cd backend/terragrunt/live/dev
           terragrunt apply --all --auto-approve --non-interactive -lock=false
 
+      - name: Get Storage Account Name
+        id: get_storage
+        run: |
+          cd backend/terragrunt/live/dev/blob-site
+          echo "storage_account_name=$(terragrunt output -raw storage_account_name)" >> $GITHUB_OUTPUT
+
 
 
   Push-to-storage:
@@ -81,6 +87,7 @@ jobs:
         run: |
           cd backend/terragrunt/live/dev/blob-site
           echo "STORAGE_ACCOUNT_NAME=$(terragrunt output -raw storage_account_name)" >> $GITHUB_ENV
+          
       - name: Authenticate to Azure
         uses: azure/login@v1
         with:
@@ -91,7 +98,7 @@ jobs:
       - name: Push Docs
         working-directory: frontend/website/symtex-dev-site
         run: |
-            npm install
-            npm run build
-            ls -la build
-            az storage blob upload-batch -d '$web' -s build --account-name $STORAGE_ACCOUNT_NAME --auth-mode key
+          npm install
+          npm run build
+          ls -la build
+          az storage blob upload-batch -d '$web' -s build --account-name ${{ needs.Build-Terragrunt-Env.outputs.storage_account_name }} --auth-mode key
