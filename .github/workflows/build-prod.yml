@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       azure-logged-in: ${{ steps.login-to-azure.outputs.logged-in }}
+      storage_account_name: ${{ steps.get_storage.outputs.storage_account_name }}
 
     steps:
       - name: Checkout
@@ -56,6 +57,12 @@ jobs:
           cd backend/terragrunt/live/prod
           terragrunt apply --all --auto-approve --non-interactive -lock=false
 
+      - name: Get Storage Account Name
+        id: get_storage
+        run: |
+          cd backend/terragrunt/live/prod/blob-site
+          echo "storage_account_name=$(terragrunt output -raw storage_account_name)" >> $GITHUB_OUTPUT
+
 
 
   Push-to-storage:
@@ -76,12 +83,6 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Get Storage Account Name
-        id: get_storage
-        run: |
-          cd backend/terragrunt/live/prod/blob-site
-          echo "STORAGE_ACCOUNT_NAME=$(terragrunt output -raw storage_account_name)" >> $GITHUB_ENV
-
       - name: Authenticate to Azure
         uses: azure/login@v1
         with:
@@ -95,4 +96,4 @@ jobs:
           npm install
           npm run build
           ls -la build
-          az storage blob upload-batch -d '$web' -s build --account-name $STORAGE_ACCOUNT_NAME --auth-mode key
+          az storage blob upload-batch -d '$web' -s build --account-name ${{ needs.Build-Terragrunt-Env.outputs.storage_account_name }} --auth-mode key
