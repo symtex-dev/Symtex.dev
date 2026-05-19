@@ -96,7 +96,7 @@ jobs:
       - name: Push Docs
         working-directory: frontend/website/symtex-dev-site
         run: |
-            npm install
-            npm run build
-            ls -la build
-            az storage blob upload-batch -d '$web' -s build --account-name smtxwebdevwebsite --auth-mode key
+          npm install
+          npm run build
+          ls -la build
+          az storage blob upload-batch -d '$web' -s build --account-name $STORAGE_ACCOUNT_NAME --auth-mode key
