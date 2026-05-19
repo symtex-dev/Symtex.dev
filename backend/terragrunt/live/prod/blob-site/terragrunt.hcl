@@ -37,7 +37,7 @@ terraform {
 
 inputs = {
     name = "smtxweb${local.environment}website"
-    resource_group_name = dependency.rg.outputs.name
+    resource_group_name = dependency.rg.outputs.resource_group_name
     location = local.parent.location
 
 }
