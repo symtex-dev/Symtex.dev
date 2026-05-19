@@ -3,7 +3,7 @@ name: Build Dev Environment
 on: 
     push:
         branches: 
-            - dev
+            - main
 
 jobs:
   Build-Terragrunt-Env:
@@ -47,13 +47,13 @@ jobs:
 
       - name: Run Terragrunt init in Dev
         run: |
-          cd backend/terragrunt/live/dev
+          cd backend/terragrunt/live/prod
           terragrunt init --all --non-interactive
 
 
       - name: Run Terragrunt Apply in Dev
         run: |
-          cd backend/terragrunt/live/dev
+          cd backend/terragrunt/live/prod
           terragrunt apply --all --auto-approve --non-interactive -lock=false
 
 
@@ -76,11 +76,13 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Get Storage Account name 
-        id: get_storage
-        run: |
-          cd backend/terragrunt/live/dev/blob-site
-          echo "STORAGE_ACCOUNT_NAME=$(terragrunt output -raw storage_account_name)" >> $GITHUB_ENV
+
+- name: Get Storage Account Name
+  id: get_storage
+  run: |
+    cd backend/terragrunt/live/prod/blob-site
+    echo "STORAGE_ACCOUNT_NAME=$(terragrunt output -raw storage_account_name)" >> $GITHUB_ENV
+
       - name: Authenticate to Azure
         uses: azure/login@v1
         with:
@@ -94,4 +96,4 @@ jobs:
             npm install
             npm run build
             ls -la build
-            az storage blob upload-batch -d '$web' -s build --account-name $STORAGE_ACCOUNT_NAME --auth-mode key
+            az storage blob upload-batch -d '$web' -s build --account-name STORAGE_ACCOUNT_NAME --auth-mode key
