@@ -31,7 +31,8 @@ dependency "storage" {
     config_path = "../blob-site"
     mock_outputs_allowed_terraform_commands = ["validate", "plan", "init"]
     mock_outputs = {
-          storage_output = "mock-storage-output"
+          storage_output = "mock-storage-output",
+          primary_web_endpoint = "https://mock.blob.core.windows.net"
       }
  }
 
