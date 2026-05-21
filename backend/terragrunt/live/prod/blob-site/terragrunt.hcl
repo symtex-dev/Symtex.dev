@@ -40,4 +40,6 @@ inputs = {
     resource_group_name = dependency.rg.outputs.name
     location = local.parent.location
 
+    error_document_404 = "index.html"
+
 }

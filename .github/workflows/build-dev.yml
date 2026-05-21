@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       azure-logged-in: ${{ steps.login-to-azure.outputs.logged-in }}
+      storage_account_name: ${{ steps.get_storage.outputs.storage_account_name }}
 
     steps:
       - name: Checkout
@@ -81,12 +82,6 @@ jobs:
         uses: actions/setup-node@v4  # v3 has a known cache path resolution bug
         with:
           node-version: '20'
-
-      - name: Get Storage Account name 
-        id: get_storage
-        run: |
-          cd backend/terragrunt/live/dev/blob-site
-          echo "STORAGE_ACCOUNT_NAME=$(terragrunt output -raw storage_account_name)" >> $GITHUB_ENV
           
       - name: Authenticate to Azure
         uses: azure/login@v1
