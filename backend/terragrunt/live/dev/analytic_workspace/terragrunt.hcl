@@ -32,7 +32,7 @@ terraform {
     source = "git::https://git@github.com/Capson12/blob-website.git//module/website-observ"
 }
 
-inputs {
+inputs = {
     prefix = local.parent.prefix
     location = local.parent.location
     resource_group_name = dependency.rg.resource_group_name
