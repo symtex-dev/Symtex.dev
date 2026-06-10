@@ -35,6 +35,6 @@ terraform {
 inputs = {
     prefix = local.parent.prefix
     location = local.parent.location
-    resource_group_name = dependency.rg.resource_group_name
+    resource_group_name = dependency.rg.outputs.resource_group_name
     
 }
