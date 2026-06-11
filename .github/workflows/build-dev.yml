@@ -68,7 +68,7 @@ jobs:
         id: get_connection_string
         run: |
           cd backend/terragrunt/live/dev/analytic_workspace
-          echo "connection_string=$(terragrunt output -raw connection_string)" >> $GITHUB_OUTPUT
+          echo "connection_string=$(terragrunt output -raw app_insigts_connection_string)" >> $GITHUB_OUTPUT
 
 
 
