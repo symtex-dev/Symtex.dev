@@ -15,6 +15,7 @@ jobs:
     outputs:
       azure-logged-in: ${{ steps.login-to-azure.outputs.logged-in }}
       storage_account_name: ${{ steps.get_storage.outputs.storage_account_name }}
+      connection_string: ${{ steps.get_connection_string.outputs.connection_string}}
 
     steps:
       - name: Checkout
@@ -62,6 +63,12 @@ jobs:
         run: |
           cd backend/terragrunt/live/dev/blob-site
           echo "storage_account_name=$(terragrunt output -raw storage_account_name)" >> $GITHUB_OUTPUT
+     
+      - name: Get Connection String
+        id: get_connection_string
+        run: |
+          cd backend/terragrunt/live/dev/analytic_workspace
+          echo "connection_string=$(terragrunt output -raw connection_string)" >> $GITHUB_OUTPUT
 
 
 
@@ -89,6 +96,10 @@ jobs:
           client-id: ${{ secrets.ARM_CLIENT_ID }}
           tenant-id: ${{ secrets.ARM_TENANT_ID }}
           subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+
+      - name: Inject runtime configuration
+        run: |
+          sed -i 's|__APPINSIGHTS_CONNECTION_STRING__|${{ steps.get_connection_string.outputs.connection_string }}|g' public/config.js
 
       - name: Push Docs
         working-directory: frontend/website/symtex-dev-site
