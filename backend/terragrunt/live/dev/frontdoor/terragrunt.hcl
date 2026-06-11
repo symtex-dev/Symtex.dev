@@ -37,6 +37,8 @@ dependency "domain" {
       }
  }
 
+ dependency "workspace" { config_path = "../analytic_workspace"}
+
 
 remote_state {
     backend = include.root.remote_state.backend
@@ -80,6 +82,9 @@ inputs = {
     main_route_name                     = "${local.parent.prefix}-${local.environment}-route"
     main_firewall_policy_name           = "smtxwebapp${local.environment}fwp"
     main_security_policy_name           = "${local.parent.prefix}-${local.environment}-scp"
+
+    prefix = local.parent.prefix
+    log_analytics_workspace_id = dependency.
     
 
 
