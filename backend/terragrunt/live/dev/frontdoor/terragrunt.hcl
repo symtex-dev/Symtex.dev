@@ -37,7 +37,14 @@ dependency "domain" {
       }
  }
 
- dependency "workspace" { config_path = "../analytic_workspace"}
+ dependency "workspace" { 
+    config_path = "../analytic_workspace"
+
+    mock_outputs = {
+        log_analytics_workspace_id = "mock-workspace-id"
+    }
+    
+    }
 
 
 remote_state {
