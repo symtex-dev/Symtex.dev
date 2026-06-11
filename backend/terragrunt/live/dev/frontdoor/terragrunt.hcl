@@ -43,8 +43,14 @@ dependency "domain" {
     mock_outputs = {
         log_analytics_workspace_id = "mock-workspace-id"
     }
+
+    mock_outputs_allowed_terraform_commands = [
+    "init",
+    "validate",
+    "plan",
+  ]
     
-    }
+}
 
 
 remote_state {
