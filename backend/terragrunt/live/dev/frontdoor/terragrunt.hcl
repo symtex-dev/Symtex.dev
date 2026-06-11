@@ -84,7 +84,7 @@ inputs = {
     main_security_policy_name           = "${local.parent.prefix}-${local.environment}-scp"
 
     prefix = local.parent.prefix
-    log_analytics_workspace_id = dependency.
+    log_analytics_workspace_id = dependency.workspace.outputs.log_analytics_workspace_id
     
 
 
