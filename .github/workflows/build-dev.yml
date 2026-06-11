@@ -95,5 +95,5 @@ jobs:
         run: |
           npm install
           npm run build
-          az storage blob delete-batch -s '$web' --account-name ${{ needs.Build-Terragrunt-Env.outputs.storage_account_name }} --auth-mode key
-          az storage blob upload-batch -d '$web' -s dist --account-name ${{ needs.Build-Terragrunt-Env.outputs.storage_account_name }} --auth-mode key --overwrite
+          az storage blob delete-batch -s '$web' --account-name ${{ needs.Build-Terragrunt-Env.outputs.storage_account_name }} --auth-mode login
+          az storage blob upload-batch -d '$web' -s build --account-name ${{ needs.Build-Terragrunt-Env.outputs.storage_account_name }} --auth-mode login --overwrite
