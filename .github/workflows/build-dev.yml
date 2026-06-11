@@ -99,12 +99,12 @@ jobs:
 
       - name: Inject runtime configuration
         run: |
-          sed -i 's|__APPINSIGHTS_CONNECTION_STRING__|${{ steps.get_connection_string.outputs.connection_string }}|g' frontend/website/symtex-dev-site/public/config.js
+          sed -i 's|__APPINSIGHTS_CONNECTION_STRING__|${{ needs.Build-Terragrunt-Env.outputs.connection_string }}|g' frontend/website/symtex-dev-site/public/config.js
 
       - name: Push Docs
         working-directory: frontend/website/symtex-dev-site
         run: |
           npm install
           npm run build
-          az storage blob delete-batch -s '$web' --account-name ${{ needs.Build-Terragrunt-Env.outputs.storage_account_name }} --auth-mode key
-          az storage blob upload-batch -d '$web' -s build --account-name ${{ needs.Build-Terragrunt-Env.outputs.storage_account_name }} --auth-mode key --overwrite
+          az storage blob delete-batch -s '$web' --account-name ${{ needs.Build-Terragrunt-Env.outputs.storage_account_name }} --auth-mode login
+          az storage blob upload-batch -d '$web' -s build --account-name ${{ needs.Build-Terragrunt-Env.outputs.storage_account_name }} --auth-mode login --overwrite
