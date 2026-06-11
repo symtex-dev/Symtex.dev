@@ -1,0 +1,32 @@
+# === Terraform ===
+# Ignore local Terraform state and caches used during local testing
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+terraform.tfstate.d/
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraform/
+.terraform.lock.hcl
+*.tfvars
+*.tfvars.json
+*.tfvars.local
+*.tfplan
+plan.out
+
+# === Terragrunt ===
+# Cache and debug logs created by Terragrunt when running locally
+.terragrunt-cache/
+.terragrunt-debug.log
+
+# Editor & OS files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*~
+*.swp
+*.swo

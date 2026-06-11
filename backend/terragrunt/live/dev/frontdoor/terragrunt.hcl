@@ -44,6 +44,8 @@ dependency "domain" {
         log_analytics_workspace_id = "mock-workspace-id"
     }
 
+    mock_outputs_merge_strategy_with_state = "shallow"
+
     mock_outputs_allowed_terraform_commands = [
     "init",
     "validate",
