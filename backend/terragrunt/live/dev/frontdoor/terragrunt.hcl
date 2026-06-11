@@ -83,8 +83,8 @@ inputs = {
     main_firewall_policy_name           = "smtxwebapp${local.environment}fwp"
     main_security_policy_name           = "${local.parent.prefix}-${local.environment}-scp"
 
-    prefix = local.parent.prefix
-    log_analytics_workspace_id = dependency.workspace.outputs.log_analytics_workspace_id
+    prefix                              = local.parent.prefix
+    workspace_id                        = dependency.workspace.outputs.log_analytics_workspace_id
     
 
 
