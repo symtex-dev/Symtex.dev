@@ -2,13 +2,15 @@
 
 import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 
-const appInsights = new ApplicationInsights({
-  config: {
-    connectionString:
-        window.APP_CONFIG.appInsightsConnectionString
-  }
-});
+const connectionString = window.APP_CONFIG?.appInsightsConnectionString;
 
-appInsights.loadAppInsights();
+let appInsights = null;
+
+if (connectionString) {
+  appInsights = new ApplicationInsights({
+    config: { connectionString }
+  });
+  appInsights.loadAppInsights();
+}
 
 export default appInsights;
