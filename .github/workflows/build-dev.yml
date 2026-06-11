@@ -99,7 +99,7 @@ jobs:
 
       - name: Inject runtime configuration
         run: |
-          sed -i 's|__APPINSIGHTS_CONNECTION_STRING__|${{ steps.get_connection_string.outputs.connection_string }}|g' public/config.js
+          sed -i 's|__APPINSIGHTS_CONNECTION_STRING__|${{ steps.get_connection_string.outputs.connection_string }}|g' frontend/website/symtex-dev-site/public/config.js
 
       - name: Push Docs
         working-directory: frontend/website/symtex-dev-site
