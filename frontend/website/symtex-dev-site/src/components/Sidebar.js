@@ -1,128 +1,59 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
-  Typography,
-  Stack,
   Button,
-  IconButton,
   Drawer,
+  IconButton,
+  Stack,
+  Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { Menu as MenuIcon, Close as CloseIcon } from '@mui/icons-material';
-
-export const SIDEBAR_WIDTH = 240;
+import { Close as CloseIcon, Menu as MenuIcon } from '@mui/icons-material';
 
 const navItems = [
-  { id: 'hero', label: 'Home' },
-  { id: 'services', label: 'Services' },
-  { id: 'technologies', label: 'Technologies' },
-  { id: 'about', label: 'About' },
-  { id: 'contact', label: 'Contact' },
+  { id: 'hero', label: 'Overview' },
+  { id: 'services', label: 'Capabilities' },
+  { id: 'work', label: 'Case studies' },
+  { id: 'technologies', label: 'Stack' },
+  { id: 'about', label: 'Approach' },
 ];
 
-function SidebarContent({ active, onScrollTo }) {
+function BrandMark() {
   return (
-    <Box
-      sx={{
-        width: SIDEBAR_WIDTH,
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        p: 3,
-      }}
-    >
-      {/* Logo */}
-      <Stack direction="row" spacing={1.25} alignItems="center" sx={{ mb: 6 }}>
-        <Box
+    <Stack direction="row" alignItems="center" spacing={1.1} sx={{ whiteSpace: 'nowrap' }}>
+      <Typography sx={{ fontFamily: '"IBM Plex Mono", monospace', fontSize: { xs: '0.76rem', sm: '0.86rem' }, fontWeight: 500, color: 'text.primary', letterSpacing: '0.04em' }}>SYMTEX</Typography>
+      <Box aria-label="X logo placeholder" sx={{ width: 26, height: 26, display: 'grid', placeItems: 'center', bgcolor: '#E5E5E5', color: '#18181B', fontFamily: '"IBM Plex Mono", monospace', fontSize: '1rem', fontWeight: 500, lineHeight: 1 }}>X</Box>
+      <Typography sx={{ fontFamily: '"IBM Plex Mono", monospace', fontSize: { xs: '0.76rem', sm: '0.86rem' }, fontWeight: 500, color: 'text.primary', letterSpacing: '0.04em' }}>DIGITAL</Typography>
+    </Stack>
+  );
+}
+
+function Navigation({ active, onNavigate, vertical = false }) {
+  return (
+    <Stack direction={vertical ? 'column' : 'row'} spacing={vertical ? 0.5 : 0} alignItems={vertical ? 'stretch' : 'center'}>
+      {navItems.map((item) => (
+        <Button
+          key={item.id}
+          onClick={() => onNavigate(item.id)}
           sx={{
-            width: 34,
-            height: 34,
-            borderRadius: '12px',
-            display: 'grid',
-            placeItems: 'center',
-            bgcolor: 'rgba(94, 234, 212, 0.12)',
-            border: '1px solid rgba(94, 234, 212, 0.22)',
-            color: 'primary.main',
-            fontWeight: 800,
-            fontSize: '0.95rem',
-            flexShrink: 0,
+            justifyContent: vertical ? 'flex-start' : 'center',
+            minWidth: 0,
+            px: vertical ? 1.25 : 1.1,
+            py: vertical ? 1 : 0.75,
+            fontFamily: '"IBM Plex Mono", monospace',
+            fontSize: '0.69rem',
+            fontWeight: 400,
+            color: active === item.id ? 'text.primary' : 'text.secondary',
+            bgcolor: active === item.id ? 'rgba(255,255,255,0.08)' : 'transparent',
+            borderRadius: 0,
+            '&:hover': { bgcolor: 'rgba(255,255,255,0.06)', color: 'text.primary' },
           }}
         >
-          S
-        </Box>
-        <Box>
-          <Typography
-            variant="h6"
-            sx={{
-              color: 'text.primary',
-              fontWeight: 700,
-              letterSpacing: '-0.03em',
-              fontSize: '1.05rem',
-              lineHeight: 1,
-            }}
-          >
-            Symtex
-          </Typography>
-          <Typography variant="caption" sx={{ color: 'text.secondary', letterSpacing: '0.05em' }}>
-            Cloud &amp; Automation
-          </Typography>
-        </Box>
-      </Stack>
-
-      {/* Nav links */}
-      <Stack spacing={0.25} sx={{ flex: 1 }}>
-        {navItems.map((item) => {
-          const isActive = active === item.id;
-          return (
-            <Button
-              key={item.id}
-              onClick={() => onScrollTo(item.id)}
-              fullWidth
-              sx={{
-                justifyContent: 'flex-start',
-                px: 1.75,
-                py: 1.1,
-                borderRadius: 2,
-                fontSize: '0.875rem',
-                color: isActive ? 'text.primary' : 'text.secondary',
-                fontWeight: isActive ? 600 : 400,
-                bgcolor: isActive ? 'rgba(94, 234, 212, 0.07)' : 'transparent',
-                borderLeft: '2px solid',
-                borderColor: isActive ? 'primary.main' : 'transparent',
-                transition: 'all 160ms ease',
-                '&:hover': {
-                  bgcolor: 'rgba(255,255,255,0.04)',
-                  color: 'text.primary',
-                  borderColor: isActive ? 'primary.main' : 'rgba(94, 234, 212, 0.3)',
-                },
-              }}
-            >
-              {item.label}
-            </Button>
-          );
-        })}
-      </Stack>
-
-      {/* Bottom CTA */}
-      <Box sx={{ mt: 3 }}>
-        <Typography
-          variant="caption"
-          sx={{ color: 'text.secondary', fontSize: '0.72rem', display: 'block', mb: 1.5 }}
-        >
-          contact@symtex.dev
-        </Typography>
-        <Button
-          variant="outlined"
-          onClick={() => onScrollTo('contact')}
-          fullWidth
-          size="small"
-          sx={{ fontSize: '0.82rem' }}
-        >
-          Start a conversation
+          {item.label}
         </Button>
-      </Box>
-    </Box>
+      ))}
+    </Stack>
   );
 }
 
@@ -133,124 +64,44 @@ export default function Sidebar() {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.filter((e) => e.isIntersecting);
-        if (visible.length > 0) {
-          visible.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-          setActive(visible[0].target.id);
-        }
-      },
-      { rootMargin: '-20% 0px -70% 0px' }
-    );
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries.filter((entry) => entry.isIntersecting);
+      if (visible.length) {
+        visible.sort((first, second) => first.boundingClientRect.top - second.boundingClientRect.top);
+        setActive(visible[0].target.id);
+      }
+    }, { rootMargin: '-20% 0px -70% 0px' });
 
     navItems.forEach(({ id }) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
+      const section = document.getElementById(id);
+      if (section) observer.observe(section);
     });
-
     return () => observer.disconnect();
   }, []);
 
-  const scrollTo = (id) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  const navigate = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     setMobileOpen(false);
-  };
-
-  const paperStyles = {
-    bgcolor: 'rgba(6, 11, 24, 0.97)',
-    borderRight: '1px solid',
-    borderColor: 'divider',
-    backgroundImage: 'none',
   };
 
   return (
     <>
-      {/* Mobile top bar */}
-      {isMobile && (
-        <Box
-          sx={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            zIndex: 1200,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            px: 2,
-            py: 1.5,
-            bgcolor: 'rgba(6, 11, 24, 0.95)',
-            borderBottom: '1px solid',
-            borderColor: 'divider',
-            backdropFilter: 'blur(18px)',
-          }}
-        >
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Box
-              sx={{
-                width: 30,
-                height: 30,
-                borderRadius: '10px',
-                display: 'grid',
-                placeItems: 'center',
-                bgcolor: 'rgba(94, 234, 212, 0.12)',
-                border: '1px solid rgba(94, 234, 212, 0.22)',
-                color: 'primary.main',
-                fontWeight: 800,
-                fontSize: '0.85rem',
-              }}
-            >
-              S
-            </Box>
-            <Typography
-              variant="h6"
-              sx={{ color: 'text.primary', fontWeight: 700, fontSize: '1rem', letterSpacing: '-0.03em' }}
-            >
-              Symtex
-            </Typography>
-          </Stack>
-          <IconButton onClick={() => setMobileOpen(true)} sx={{ color: 'text.primary' }}>
-            <MenuIcon />
-          </IconButton>
+      <Box component="header" sx={{ height: 72, position: 'fixed', inset: '0 0 auto', zIndex: 1200, borderBottom: '1px solid', borderColor: 'divider', bgcolor: 'rgba(23,23,23,0.95)', backdropFilter: 'blur(14px)' }}>
+        <Box sx={{ height: '100%', maxWidth: 1440, mx: 'auto', px: { xs: 2, md: 4 }, display: 'grid', gridTemplateColumns: { xs: '1fr auto 1fr', md: '1fr auto 1fr' }, alignItems: 'center' }}>
+          <Box sx={{ display: { xs: 'none', md: 'block' } }}><Navigation active={active} onNavigate={navigate} /></Box>
+          <Box sx={{ justifySelf: 'center' }}><BrandMark /></Box>
+          <Box sx={{ justifySelf: 'end' }}>
+            {isMobile ? <IconButton aria-label="Open navigation" onClick={() => setMobileOpen(true)} sx={{ color: 'text.primary' }}><MenuIcon /></IconButton> : <Button variant="outlined" size="small" onClick={() => navigate('contact')} sx={{ fontFamily: '"IBM Plex Mono", monospace', fontSize: '0.7rem' }}>Start a project</Button>}
+          </Box>
         </Box>
-      )}
-
-      {/* Desktop fixed sidebar */}
-      <Box
-        sx={{
-          display: { xs: 'none', md: 'block' },
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          height: '100vh',
-          width: SIDEBAR_WIDTH,
-          zIndex: 1200,
-          ...paperStyles,
-        }}
-      >
-        <SidebarContent active={active} onScrollTo={scrollTo} />
       </Box>
 
-      {/* Mobile drawer */}
-      <Drawer
-        anchor="left"
-        open={mobileOpen}
-        onClose={() => setMobileOpen(false)}
-        sx={{
-          display: { md: 'none' },
-          '& .MuiDrawer-paper': {
-            width: SIDEBAR_WIDTH,
-            ...paperStyles,
-          },
-        }}
-      >
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 1.5 }}>
-          <IconButton onClick={() => setMobileOpen(false)} sx={{ color: 'text.secondary' }}>
-            <CloseIcon />
-          </IconButton>
+      <Drawer anchor="right" open={mobileOpen} onClose={() => setMobileOpen(false)} PaperProps={{ sx: { width: 280, bgcolor: '#1C1C1C', backgroundImage: 'none', borderLeft: '1px solid #3F3F46' } }}>
+        <Box sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 5 }}><BrandMark /><IconButton aria-label="Close navigation" onClick={() => setMobileOpen(false)} sx={{ color: 'text.secondary' }}><CloseIcon /></IconButton></Box>
+          <Navigation active={active} onNavigate={navigate} vertical />
+          <Box sx={{ mt: 'auto', pt: 3 }}><Button variant="contained" fullWidth onClick={() => navigate('contact')}>Start a project</Button></Box>
         </Box>
-        <SidebarContent active={active} onScrollTo={scrollTo} />
       </Drawer>
     </>
   );
