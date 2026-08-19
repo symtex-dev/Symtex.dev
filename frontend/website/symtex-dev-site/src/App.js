@@ -1,48 +1,42 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { ThemeProvider, CssBaseline, Box } from '@mui/material';
 import theme from './theme';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import Home from './pages/Home';
-import Services from './pages/Services';
-import About from './pages/About';
-import Contact from './pages/Contact';
 import './App.css';
 
-function ScrollToTop() {
-  const { pathname } = useLocation();
-  React.useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
-  return null;
-}
-
-function AppContent() {
+function ComingSoonOverlay() {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <ScrollToTop />
-      <Navbar />
-      <Box component="main" sx={{ flexGrow: 1 }}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
+    <Box
+      role="dialog"
+      aria-modal="true"
+      aria-label="Coming soon"
+      className="coming-soon-overlay"
+    >
+      <Box className="coming-soon-panel">
+        <Box className="coming-soon-kicker">SYMTEX DIGITAL</Box>
+        <Box component="h1" className="coming-soon-title">Coming Soon</Box>
+        <Box className="coming-soon-copy">
+          We are refining the new experience. Please check back shortly.
+        </Box>
       </Box>
-      <Footer />
     </Box>
   );
 }
 
 function App() {
+  React.useEffect(() => {
+    document.documentElement.classList.add('scroll-locked');
+    document.body.classList.add('scroll-locked');
+
+    return () => {
+      document.documentElement.classList.remove('scroll-locked');
+      document.body.classList.remove('scroll-locked');
+    };
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Router>
-        <AppContent />
-      </Router>
+      <ComingSoonOverlay />
     </ThemeProvider>
   );
 }
