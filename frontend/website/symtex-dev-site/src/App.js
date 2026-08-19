@@ -1,5 +1,6 @@
 import React from 'react';
 import { ThemeProvider, CssBaseline, Box } from '@mui/material';
+import ConstructionIcon from '@mui/icons-material/Construction';
 import theme from './theme';
 import './App.css';
 
@@ -8,15 +9,16 @@ function ComingSoonOverlay() {
     <Box
       role="dialog"
       aria-modal="true"
-      aria-label="Coming soon"
+      aria-label="Under construction"
       className="coming-soon-overlay"
     >
       <Box className="coming-soon-panel">
-        <Box className="coming-soon-kicker">SYMTEX DIGITAL</Box>
-        <Box component="h1" className="coming-soon-title">Coming Soon</Box>
-        <Box className="coming-soon-copy">
-          We are refining the new experience. Please check back shortly.
+        <Box className="construction-logo" aria-hidden="true">
+          <ConstructionIcon fontSize="inherit" />
         </Box>
+        <Box className="coming-soon-kicker">SYMTEX DIGITAL</Box>
+        <Box component="h1" className="coming-soon-title">Under Construction</Box>
+        <Box className="coming-soon-copy">Coming Q4 2026</Box>
       </Box>
     </Box>
   );

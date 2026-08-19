@@ -50,6 +50,20 @@ body.scroll-locked {
   text-align: center;
 }
 
+.construction-logo {
+  width: clamp(72px, 12vw, 128px);
+  height: clamp(72px, 12vw, 128px);
+  display: grid;
+  place-items: center;
+  margin-bottom: clamp(24px, 4vw, 44px);
+  color: #0b1020;
+  background: #f59e0b;
+  border: 2px solid #fbbf24;
+  border-radius: 10px;
+  font-size: clamp(2.8rem, 7vw, 5.4rem);
+  box-shadow: 0 22px 60px rgba(245, 158, 11, 0.22);
+}
+
 .coming-soon-kicker {
   color: #94a3b8;
   font-size: 0.76rem;
