@@ -24,8 +24,11 @@ dependency "dns_zone" {
 
     mock_outputs_allowed_terraform_commands = ["validate", "plan", "init"]
     mock_outputs = {
-        dns_domain = "mock.com"
+       custom_domain = {
+        subdomain = "dev"
+        zone_name = "mock.com"
         resource_group_name = "mock-resource-group"
+        }
     }
 
 
