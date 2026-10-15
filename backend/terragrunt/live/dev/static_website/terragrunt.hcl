@@ -10,11 +10,11 @@ locals {
 }
 
 dependency "rg" {
-    config_path = "../resource_group"
+    config_path = "../core/resource_group"
 
     mock_outputs_allowed_terraform_commands = ["validate", "plan", "init"]
     mock_outputs = {
-        resource_group_name = "mock-resource-group"
+        name = "mock-resource-group"
     }
 }
 
@@ -32,14 +32,13 @@ remote_state {
 
 
 terraform {
-    source = "git::https://git@github.com/Capson12/blob-website.git//module/blob-website"
+    source = "git::https://git@github.com/Capson12/blob-website.git//module/static-website"
 }
 
 inputs = {
-    name = "smtxweb${local.environment}website"
-    resource_group_name = dependency.rg.outputs.name
-    location = local.parent.location
-
-    error_document_404 = "index.html"
+    prefix                      = local.parent.prefix
+    resource_group_name         = dependency.rg.outputs.name
+    location                    = "eastus2"
+    sku_size                    = "Standard"
 
 }
