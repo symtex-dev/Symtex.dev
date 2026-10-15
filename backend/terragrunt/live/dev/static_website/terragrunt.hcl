@@ -23,12 +23,10 @@ dependency "dns_zone" {
     config_path = "../../shared/dns_domain"
 
     mock_outputs_allowed_terraform_commands = ["validate", "plan", "init"]
+    mock_outputs_merge_strategy_with_state = "shallow"
     mock_outputs = {
-       custom_domain = {
-        subdomain = "dev"
-        zone_name = "mock.com"
+        dns_zone_name = "mock.com"
         resource_group_name = "mock-resource-group"
-        }
     }
 
 
