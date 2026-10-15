@@ -19,6 +19,18 @@ dependency "rg" {
 }
 
 
+dependency "dns_zone_name" {
+    config_path = "../../shared/dns_domain"
+
+    mock_outputs_allowed_terraform_commands = ["validate", "plan", "init"]
+    mock_outputs = {
+        name = "mockdns.zone"
+    }
+
+
+}
+
+
 
 remote_state {
     backend = include.root.remote_state.backend
@@ -40,5 +52,13 @@ inputs = {
     resource_group_name         = dependency.rg.outputs.name
     location                    = "eastus2"
     sku_size                    = "Standard"
+
+     custom_domain = {
+    subdomain           = "dev"
+    zone_name           = dependency.dns_zone.outputs.dns_zone_name
+    resource_group_name = dependency.dns_zone.outputs.name
+  }
+
+
 
 }

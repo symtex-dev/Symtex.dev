@@ -65,7 +65,7 @@ jobs:
 
 
 
-  Push-to-storage:
+  Push-to-Static-resorce:
     needs: Build-Terragrunt-Env
     runs-on: ubuntu-latest
 
@@ -73,27 +73,31 @@ jobs:
       contents: read
       id-token: write
   
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4  # v3 has a known cache path resolution bug
-        with:
-          node-version: '20'
 
-      - name: Authenticate to Azure
-        uses: azure/login@v1
+      - uses: actions/setup-node@v4
         with:
-          client-id: ${{ secrets.ARM_CLIENT_ID }}
-          tenant-id: ${{ secrets.ARM_TENANT_ID }}
-          subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/website/symtex-dev-site/package-lock.json
 
-      - name: Push Docs
+      - name: Install and build admin frontend
         working-directory: frontend/website/symtex-dev-site
+        env:
+          VITE_API_URL: ${{ vars.ADMIN_API_URL }}
         run: |
-          npm install
+          npm ci
           npm run build
-          az storage blob delete-batch -s '$web' --account-name ${{ needs.Build-Terragrunt-Env.outputs.storage_account_name }} --auth-mode key
-          az storage blob upload-batch -d '$web' -s build --account-name ${{ needs.Build-Terragrunt-Env.outputs.storage_account_name }} --auth-mode key --overwrite
+
+      - name: Deploy to Azure Static Web Apps
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          action: upload
+          app_location: frontend/website/symtex-dev-site/build
+          api_location: ""
+          output_location: ""
+          skip_app_build: true
