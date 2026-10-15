@@ -20,7 +20,7 @@ dependency "rg" {
 
 
 dependency "dns_zone" {
-    config_path = "../../shared/dns_domain"
+    config_path = "../shared/dns_domain"
 
     mock_outputs_allowed_terraform_commands = ["validate", "plan", "init"]
     mock_outputs = {
