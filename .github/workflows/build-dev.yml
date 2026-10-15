@@ -52,7 +52,6 @@ jobs:
         run: |
           cd backend/terragrunt/live/shared
           terragrunt init --all --non-interactive
-                - name: Run Terragrunt init in shared
         
       - name: Run Terragrunt apply in shared
         run: |
