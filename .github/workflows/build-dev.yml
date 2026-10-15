@@ -58,22 +58,11 @@ jobs:
           cd backend/terragrunt/live/dev
           terragrunt apply --all --auto-approve --non-interactive -lock=false
 
-      - name: Get Storage Account Name
-        id: get_storage
-        run: |
-          cd backend/terragrunt/live/dev/blob-site
-          echo "storage_account_name=$(terragrunt output -raw storage_account_name)" >> $GITHUB_OUTPUT
-     
-      - name: Get Connection String
-        id: get_connection_string
-        run: |
-          cd backend/terragrunt/live/dev/analytic_workspace
-          echo "connection_string=$(terragrunt output -raw app_insigts_connection_string)" >> $GITHUB_OUTPUT
 
 
           
 
-  Push-to-storage:
+  Push-to-Static-resorce:
     needs: Build-Terragrunt-Env
     runs-on: ubuntu-latest
 
@@ -81,7 +70,6 @@ jobs:
       contents: read
       id-token: write
   
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
