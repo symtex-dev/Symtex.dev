@@ -1,0 +1,60 @@
+# DNS Records: symtex.dev
+
+Names are relative to symtex.dev. @ means the root domain. TTLs are in seconds.
+
+## Records to Re-add
+
+| Name | Type | TTL | Value / Target | MX Priority |
+| --- | --- | --- | --- | --- |
+| @ | MX | 3600 | symtex-dev.mail.protection.outlook.com | 0 |
+| @ | TXT | 3600 | v=spf1 include:spf.protection.outlook.com -all | - |
+| _dnsauth | TXT | 3600 | _4uw7xy73m4k19yuvvix43amg8uv6hg3 | - |
+| autodiscover | CNAME | 3600 | autodiscover.outlook.com | - |
+| dev | CNAME | 300 | smtx-webapp-dev-endpoint-fve4cyaqh7c5c3c3.z03.azurefd.net | - |
+| _dnsauth.dev | TXT | 3600 | _201zcmacp2z9na1whgpkc570ix1f2gv | - |
+| www | CNAME | 300 | smtx-webapp-prod-endpoint-ebd8efcadmhfhkbp.z03.azurefd.net | - |
+| _dnsauth.www | TXT | 3600 | _fjdv34dpbahcu887ulc629llwybvlu4 | - |
+
+If CDN/Front Door resources are recreated, confirm their current endpoint names
+and domain-verification TXT values before restoring these records.
+
+## Root A Record: Azure Alias
+
+| Name | Type | TTL | Alias Target Type | Alias Target Resource |
+| --- | --- | --- | --- | --- |
+| @ | A | 300 | Azure CDN | smtx-webapp-prod-profile |
+
+This is an Azure alias record, not a literal IP address. Enable the alias option
+and select the target Azure resource. The original IP value was shown as "-".
+
+## Azure-managed Records: Reference Only
+
+Azure creates the root NS and SOA records automatically. If the zone is recreated,
+use its newly assigned nameservers at your domain registrar, not this old list.
+
+### NS Record
+
+Name: @
+Type: NS
+TTL: 172800
+
+- ns1-08.azure-dns.com.
+- ns2-08.azure-dns.net.
+- ns3-08.azure-dns.org.
+- ns4-08.azure-dns.info.
+
+### SOA Record
+
+Name: @
+Type: SOA
+TTL: 3600
+
+| Field | Original Value |
+| --- | --- |
+| Email | azuredns-hostmaster.microsoft.com |
+| Host | ns1-08.azure-dns.com. |
+| Refresh | 3600 |
+| Retry | 300 |
+| Expire | 2419200 |
+| Minimum TTL | 300 |
+| Serial number | 1 |

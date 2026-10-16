@@ -1,11 +1,11 @@
 include "root" {
-    path = find_in_parent_folders("root.hcl")
+    path   = find_in_parent_folders("root.hcl")
     expose = true
 }
 
 locals {
-    parent = read_terragrunt_config(find_in_parent_folders("root.hcl")).locals
-    environment = basename(dirname(get_terragrunt_dir())) 
+    parent      = read_terragrunt_config(find_in_parent_folders("root.hcl")).locals
+    environment = basename(dirname(get_terragrunt_dir()))
     folder_name = basename(get_terragrunt_dir())
 }
 
@@ -18,49 +18,41 @@ dependency "rg" {
     }
 }
 
-
-dependency "dns_zone" {
-    config_path = "../../shared/dns_domain"
-
-    mock_outputs_allowed_terraform_commands = ["validate", "plan", "init"]
-    mock_outputs_merge_strategy_with_state = "shallow"
-    mock_outputs = {
-        dns_zone_name = "mock.com"
-        resource_group_name = "mock-resource-group"
-    }
-
-
-}
-
-
-
 remote_state {
     backend = include.root.remote_state.backend
-    config  = merge(
+    config = merge(
         include.root.remote_state.config,
-        {key = "${local.parent.prefix}/${local.environment}/${local.folder_name}/terraform.state"}
-    ) 
+        {
+            key = "${local.parent.prefix}/${local.environment}/${local.folder_name}/terraform.state"
+        }
+    )
 }
-
-
-
 
 terraform {
     source = "git::https://git@github.com/Capson12/blob-website.git//module/static-website"
 }
 
+generate "connectivity_dns" {
+    path      = "connectivity_dns.tf"
+    if_exists = "overwrite_terragrunt"
+    contents  = <<EOF
+provider "azurerm" {
+  alias           = "connectivity"
+  subscription_id = "${get_env("CONNECTIVITY_SUBSCRIPTION_ID")}"
+  features {}
+}
+EOF
+}
+
 inputs = {
-    prefix                      = local.parent.prefix
-    resource_group_name         = dependency.rg.outputs.name
-    location                    = "eastus2"
-    sku_size                    = "Standard"
+    prefix              = local.parent.prefix
+    resource_group_name = dependency.rg.outputs.name
+    location            = "eastus2"
+    sku_size            = "Standard"
 
     custom_domain = {
-    subdomain           = "dev"
-    zone_name           = dependency.dns_zone.outputs.dns_zone_name
-    resource_group_name = dependency.dns_zone.outputs.resource_group_name
-  }
-
-
-
+        subdomain           = "dev"
+        zone_name           = "symtex.dev"
+        resource_group_name = get_env("DNS_RESOURCE_GROUP_NAME")
+    }
 }

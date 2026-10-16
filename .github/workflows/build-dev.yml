@@ -10,6 +10,10 @@ jobs:
     permissions: 
       contents: read
       id-token: write
+  
+    env:
+      CONNECTIVITY_SUBSCRIPTION_ID: ${{ vars.CONNECTIVITY_SUBSCRIPTION_ID }}
+      DNS_RESOURCE_GROUP_NAME: ${{ vars.DNS_RESOURCE_GROUP_NAME }}
 
     runs-on: ubuntu-latest
     outputs:
