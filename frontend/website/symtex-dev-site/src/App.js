@@ -2,9 +2,27 @@ import React from 'react';
 import { ThemeProvider, CssBaseline, Box } from '@mui/material';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import theme from './theme';
-import Sidebar from './components/Sidebar';
-import MainPage from './pages/MainPage';
 import './App.css';
+
+function ComingSoonOverlay() {
+  return (
+    <Box
+      role="dialog"
+      aria-modal="true"
+      aria-label="Under construction"
+      className="coming-soon-overlay"
+    >
+      <Box className="coming-soon-panel">
+        <Box className="construction-logo" aria-hidden="true">
+          <ConstructionIcon fontSize="inherit" />
+        </Box>
+        <Box className="coming-soon-kicker">SYMTEX DIGITAL</Box>
+        <Box component="h1" className="coming-soon-title">Under Construction</Box>
+        <Box className="coming-soon-copy">Coming Q4 2026</Box>
+      </Box>
+    </Box>
+  );
+}
 
 function App() {
   React.useEffect(() => {
@@ -20,15 +38,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box>
-        <Sidebar />
-        <Box
-          component="main"
-          sx={{ minWidth: 0, pt: '72px' }}
-        >
-          <MainPage />
-        </Box>
-      </Box>
+      <ComingSoonOverlay />
     </ThemeProvider>
   );
 }
