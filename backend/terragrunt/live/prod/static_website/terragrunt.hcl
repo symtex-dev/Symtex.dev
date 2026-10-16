@@ -55,7 +55,7 @@ EOF
 }
 
 inputs = {
-    prefix              = local.parent.prefix
+    prefix              = "${local.parent.prefix}-prod"
     resource_group_name = dependency.rg.outputs.name
     location            = "eastus2"
     sku_size            = "Standard"
