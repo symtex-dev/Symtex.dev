@@ -51,18 +51,6 @@ jobs:
           echo "AZURE_CLIENT_ID=${{ secrets.ARM_CLIENT_ID }}" >> $GITHUB_ENV
 
 
-
-      - name: Run Terragrunt init in shared
-        run: |
-          cd backend/terragrunt/live/shared
-          terragrunt init --all --non-interactive
-        
-      - name: Run Terragrunt apply in shared
-        run: |
-          cd backend/terragrunt/live/shared
-          terragrunt apply --all --non-interactive
-
-
       - name: Run Terragrunt init in Dev
         run: |
           cd backend/terragrunt/live/dev

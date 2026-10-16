@@ -12,9 +12,10 @@ jobs:
       id-token: write
 
     runs-on: ubuntu-latest
-    outputs:
-      azure-logged-in: ${{ steps.login-to-azure.outputs.logged-in }}
-      storage_account_name: ${{ steps.get_storage.outputs.storage_account_name }}
+  
+    env:
+      CONNECTIVITY_SUBSCRIPTION_ID: ${{ vars.CONNECTIVITY_SUBSCRIPTION_ID }}
+      DNS_RESOURCE_GROUP_NAME: ${{ vars.DNS_RESOURCE_GROUP_NAME }}
 
     steps:
       - name: Checkout
@@ -56,13 +57,6 @@ jobs:
         run: |
           cd backend/terragrunt/live/prod
           terragrunt apply --all --auto-approve --non-interactive -lock=false
-
-      - name: Get Storage Account Name
-        id: get_storage
-        run: |
-          cd backend/terragrunt/live/prod/blob-site
-          echo "storage_account_name=$(terragrunt output -raw storage_account_name)" >> $GITHUB_OUTPUT
-
 
 
   Push-to-Static-resorce:
