@@ -61,7 +61,7 @@ inputs = {
     sku_size            = "Standard"
 
     custom_domain = {
-        subdomain           = "dev"
+        subdomain           = "www"
         zone_name           = "symtex.dev"
         resource_group_name = get_env("DNS_RESOURCE_GROUP_NAME")
     }
