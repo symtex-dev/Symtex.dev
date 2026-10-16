@@ -1,5 +1,5 @@
 locals {
-    prefix = "smtx-webapp"
+    prefix = "webapp"
     location = "uksouth"
     dns_domain = "symtex.dev"
 

@@ -1,0 +1,27 @@
+# Terraform state and backup files
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfvars
+.terraform/
+.terraform.lock.hcl
+*.terragrunt/
+
+# Local .env or secrets
+.env
+*.env
+
+# Editor and OS files
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Terragrunt cache and plan outputs
+.terragrunt-cache/
+.terragrunt-debug.log
+*.tfplan
+plan.out

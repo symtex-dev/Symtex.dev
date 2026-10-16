@@ -2,6 +2,13 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Installing dependencies
+
+Use Node.js 20 with npm 10 to match CI, then run `npm ci` in this directory.
+When changing dependencies, use `npm install` with the same versions and commit
+both `package.json` and `package-lock.json`. Verify with `npm ci` and
+`CI=true npm run build` before pushing.
+
 ## Available Scripts
 
 In the project directory, you can run:

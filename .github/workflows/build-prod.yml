@@ -12,9 +12,10 @@ jobs:
       id-token: write
 
     runs-on: ubuntu-latest
-    outputs:
-      azure-logged-in: ${{ steps.login-to-azure.outputs.logged-in }}
-      storage_account_name: ${{ steps.get_storage.outputs.storage_account_name }}
+  
+    env:
+      CONNECTIVITY_SUBSCRIPTION_ID: ${{ vars.CONNECTIVITY_SUBSCRIPTION_ID }}
+      DNS_RESOURCE_GROUP_NAME: ${{ vars.DNS_RESOURCE_GROUP_NAME }}
 
     steps:
       - name: Checkout
@@ -57,15 +58,8 @@ jobs:
           cd backend/terragrunt/live/prod
           terragrunt apply --all --auto-approve --non-interactive -lock=false
 
-      - name: Get Storage Account Name
-        id: get_storage
-        run: |
-          cd backend/terragrunt/live/prod/blob-site
-          echo "storage_account_name=$(terragrunt output -raw storage_account_name)" >> $GITHUB_OUTPUT
 
-
-
-  Push-to-storage:
+  Push-to-Static-resorce:
     needs: Build-Terragrunt-Env
     runs-on: ubuntu-latest
 
@@ -73,28 +67,31 @@ jobs:
       contents: read
       id-token: write
   
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4  # v3 has a known cache path resolution bug
-        with:
-          node-version: '20'
 
-      - name: Authenticate to Azure
-        uses: azure/login@v1
+      - uses: actions/setup-node@v4
         with:
-          client-id: ${{ secrets.ARM_CLIENT_ID }}
-          tenant-id: ${{ secrets.ARM_TENANT_ID }}
-          subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/website/symtex-dev-site/package-lock.json
 
-      - name: Push Docs
+      - name: Install and build admin frontend
         working-directory: frontend/website/symtex-dev-site
+        env:
+          VITE_API_URL: ${{ vars.ADMIN_API_URL }}
         run: |
-          npm install
+          npm ci
           npm run build
-          az storage blob delete-batch -s '$web' --account-name ${{ needs.authenticate-to-azure.outputs.storage_account_name }} --auth-mode key
-          az storage blob upload-batch -d '$web' -s build --account-name ${{ needs.authenticate-to-azure.outputs.storage_account_name }} --auth-mode key --overwrite
 
+      - name: Deploy to Azure Static Web Apps
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_PROD }}
+          action: upload
+          app_location: frontend/website/symtex-dev-site/build
+          api_location: ""
+          output_location: ""
+          skip_app_build: true
