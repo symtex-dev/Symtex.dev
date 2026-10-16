@@ -55,13 +55,13 @@ EOF
 }
 
 inputs = {
-    prefix              = local.parent.prefix
+    prefix              = "${local.parent.prefix}-prod"
     resource_group_name = dependency.rg.outputs.name
     location            = "eastus2"
     sku_size            = "Standard"
 
     custom_domain = {
-        subdomain           = "dev"
+        subdomain           = "www"
         zone_name           = "symtex.dev"
         resource_group_name = get_env("DNS_RESOURCE_GROUP_NAME")
     }
