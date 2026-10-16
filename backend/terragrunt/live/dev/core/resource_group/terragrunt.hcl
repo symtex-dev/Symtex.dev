@@ -25,7 +25,7 @@ terraform {
 }
 
 inputs = {
-    name = "${local.parent.prefix}-${local.environment}-website"
+    name = "${local.parent.prefix}-${local.environment}-website-dev"
     location = local.parent.location
 
 }
