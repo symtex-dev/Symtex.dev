@@ -33,7 +33,7 @@ terraform {
 }
 
 generate "connectivity_dns" {
-        path      = "connectivity_dns_override.tf"
+    path      = "connectivity_dns.tf"
     if_exists = "overwrite_terragrunt"
     contents  = <<EOF
 provider "azurerm" {
@@ -41,7 +41,13 @@ provider "azurerm" {
   subscription_id = "${get_env("CONNECTIVITY_SUBSCRIPTION_ID")}"
   features {}
 }
+EOF
+}
 
+generate "connectivity_dns_override" {
+        path      = "connectivity_dns_override.tf"
+        if_exists = "overwrite_terragrunt"
+        contents  = <<EOF
 resource "azurerm_dns_cname_record" "this" {
     provider = azurerm.connectivity
 }
