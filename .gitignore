@@ -1,10 +1,35 @@
-# === Terraform ===
-# Ignore local Terraform state and caches used during local testing
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Frontend builds and test output
+build/
+dist/
+coverage/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Terraform and Terragrunt generated files
+**/.terraform/
+**/.terragrunt-cache/
+**/.terraform.lock.hcl
 *.tfstate
 *.tfstate.*
 *.tfstate.backup
 terraform.tfstate.d/
 crash.log
+crash.*.log
 override.tf
 override.tf.json
 *_override.tf
@@ -15,14 +40,12 @@ override.tf.json
 *.tfvars.json
 *.tfvars.local
 *.tfplan
+*.plan
 plan.out
-
-# === Terragrunt ===
-# Cache and debug logs created by Terragrunt when running locally
 .terragrunt-cache/
 .terragrunt-debug.log
 
-# Editor & OS files
+# OS and editor files
 .DS_Store
 Thumbs.db
 .vscode/
